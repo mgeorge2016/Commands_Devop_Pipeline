@@ -1,0 +1,42 @@
+sudo apt-get update  
+java -version 
+sudo apt install openjdk-11-jre-headless
+sudo docker exe [container id] cat /var/lib/jenkins/secrets/initialAdminPassword
+# Setup Gradle
+Go to -> Manage Jenkins -> Global Tool Configuration -> Gradle
+# Update visudo and assign administration privileges to jenkins user
+sudo vi /etc/sudoers 
+jenkins ALL=(ALL) NOPASSWD: ALL 
+sudo useradd jenkins 
+sudo su - jenkins  
+# Install Docker
+sudo apt install docker.io
+docker --version
+# Add jenkins user to Docker group
+sudo usermod -aG docker jenkins 
+# Install and Setup AWS CLI
+sudo apt install awscli 
+aws --version 
+# Configure AWS CLI
+aws configure 
+# Install and Setup Kubectl
+curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x ./kubectl 
+sudo mv ./kubectl /usr/local/bin
+# Verify the kubectl installation
+kubectl version
+# Install and Setup eksctl
+# The next thing which we are gonna do is to install the eksctl, which we will be using to create AWS EKS Clusters.
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin 
+eksctl version
+# Create eks cluster using eksctl
+# Name of the cluster : –name jhooq-test-cluster
+# Version of Kubernetes : –version 1.17
+# Region : –name eu-central-1
+# Nodegroup name/worker nodes : worker-nodes
+# Node Type : t2.micro
+# Number of nodes: -nodes 2
+# Here is the eksctl command -
+eksctl create cluster --name jhooq-test-cluster --version 1.17 --region eu-central-1 --nodegroup-name worker-nodes --node-type t2.micro --nodes 2
+# For me it almost took 20 minutes, here are the timestamps
